@@ -10,6 +10,9 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from .models import Profile
 from .forms import ProfileForm
+from .forms import ChangePasswordForm
+
+from .models import FAQ
 
 
 
@@ -98,6 +101,10 @@ def bill(request):
     cars = Car.objects.all()
     params = {'cars':cars}
     return render(request,'bill.html',params)
+
+def faq_page(request):
+    faqs = FAQ.objects.all()
+    return render(request, 'faq.html', {'faqs': faqs})
 
 def order(request):
     if request.method == "POST":
@@ -234,39 +241,31 @@ def profile_update_view(request):
 @login_required
 def profile_edit_view(request):
     profile = Profile.objects.filter(user=request.user).first()
-    if not profile:
-        return redirect('profile_edit')
+    try:
+        form = ProfileForm(instance=profile)
+        if request.method == 'POST':
+            form = ProfileForm(request.POST, request.FILES, instance=profile)
+            if form.is_valid():
+                form.save()
+                messages.success(request,"Profile updated")
+                return redirect('profile')
+        return render(request, 'profile_edit.html', {
+            'form' : form
+        })
+    except Exception as e:
+        print(e)
+        return redirect('profile_update')
+    
 
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        gender =  request.POST.get('gender')
-        age = request.POST.get('age')
-        image = request.POST.get('image')
-        bio = request.POST.get('bio')
-        
 
-        if name:
-            profile.name = name
-        if email:
-            profile.email = email
-        if gender:
-            profile.gender = gender
-        if age:
-            profile.age = age
-        if image:
-            profile.image = image
-        if bio:
-            profile.bio = bio    
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
 
-        # Save the changes
-        profile.save()
-
-        # Redirect to a new URL:
-        return redirect('profile')
-
-    # If the request method was not POST, display the form
-    else:
-        return render(request, 'profile_edit.html', {'profile': profile})
-      
-
+class ChangePasswordView(PasswordChangeView):
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy('home')
+    template_name = 'change_password.html'
+    def form_valid(self, form):
+        messages.success(self.request, 'Your password was successfully updated!')
+        return super().form_valid(form)

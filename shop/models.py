@@ -37,6 +37,10 @@ class Car(models.Model):
         return self.car_name
 
 class Order(models.Model) :
+    STATUS_CHOICES = [
+        ('SUCCESSFUL', 'Successful'),
+        ('CANCELLED', 'Cancelled'),
+    ]
     order_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=90,default="")
     email = models.CharField(max_length=50,default="")
@@ -75,3 +79,10 @@ class Profile(models.Model):
 
   def __str__(self):
     return self.name
+  
+class FAQ(models.Model):
+    question = models.CharField(max_length=255)
+    answer = models.TextField()
+
+    def __str__(self):
+        return self.question

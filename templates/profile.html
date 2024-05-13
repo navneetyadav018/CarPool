@@ -29,8 +29,11 @@ Profile
                     
                 <h3>{{profile.name}}</h3>
                 {% if request.user == profile.user %}          
-                <a href="{% url 'profile_edit' %}">
+                <a href="{% url 'profile_edit' %}" style="padding: 10%;">
                     <i class="fa fa-pencil"></i> Edit Profile
+                </a>
+                <a href="{% url 'change_password' %}">
+                    <i class="fa fa-key"></i> Change Password
                 </a>
                 {% endif %}
                 </div>
@@ -91,6 +94,27 @@ Profile
 
                         <p class="text-body-secondary">{{profile.bio}}</p>
                     </div>
+                    
+                    <div class="col d-flex flex-column gap-2">
+                        <!-- Existing code... -->
+                    
+                        <h4 class="fw-semibold mb-0 text-body-emphasis">My Orders</h4>
+                        {% for order in profile.orders.all %}
+                            <div class="order">
+                                <p class="text-body-secondary">Order ID: {{ order.order_id }}</p>
+                                <form method="POST" action="{% url 'cancel_order' order.order_id %}">
+                                    {% csrf_token %}
+                                    <input type="submit" value="Cancel Order">
+                                </form>
+                            </div>
+                        {% empty %}
+                            <p class="text-body-secondary">No orders.</p>
+                        {% endfor %}
+                       
+                    </div>
+
+                     
+                    
                 </div>
             </div>
      

@@ -1,0 +1,85 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQs</title>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.faq {
+    margin-bottom: 20px;
+}
+
+.question {
+    font-weight: bold;
+    color: #007bff;
+    cursor: pointer;
+}
+
+.answer {
+    display: none;
+    padding-left: 20px;
+    border-left: 2px solid #007bff;
+    color: #555;
+}
+
+.answer.active {
+    display: block;
+}
+</style>
+
+
+
+
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+    </nav>
+       
+<div class="container">
+    <h1>Frequently Asked Questions</h1>
+    
+    {% for faq in faqs %}
+    <div class="faq">
+        <div class="question">{{ faq.question }}</div>
+        <div class="answer">{{ faq.answer }}</div>
+    </div>
+    {% endfor %}
+    
+</div>
+
+<script>
+// JavaScript to toggle answer visibility
+document.querySelectorAll('.question').forEach(item => {
+    item.addEventListener('click', () => {
+        item.nextElementSibling.classList.toggle('active');
+    });
+});
+</script>
+
+</body>
+</html>
+
