@@ -19,11 +19,3 @@ Examples and instructions on how to use your project.
 Guidelines for contributing to your project.
 
 ## License
-
-Information about the license for your project.
-
-## Contact
-
-How to get in touch with you or your team.
-
-[text](screenshots)
