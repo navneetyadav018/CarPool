@@ -54,23 +54,24 @@ class Order(models.Model) :
     from django.contrib.auth.models import User
 
 
-
+   
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    username = models.CharField(max_length=100)
-    email = models.EmailField()
-    phone_number = models.CharField(max_length=15)
+  user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+  geneder_choices = (
+    ('male','Male'),
+    ('female','Female'),
+    ('other','Other')
+  )
+  name = models.CharField(max_length=50)
+  
+ 
+ 
+  bio = models.CharField(max_length=200,default=1)
+  gender= models.CharField(max_length=10,choices=geneder_choices)
+  image = models.ImageField(upload_to='profiles')
+  age = models.IntegerField()
+  email = models.EmailField()
+  # photo = models.ImageField(upload_to='profiles')
 
-    def __str__(self):
-        return self.name
-    
-class Complaint(models.Model):
-    name = models.CharField(max_length=30)
-    email = models.EmailField()
-    phone_number = models.CharField(max_length=15)
-    message = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name    
+  def __str__(self):
+    return self.name

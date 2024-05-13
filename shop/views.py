@@ -4,8 +4,13 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
-from .models import Car, Order, Complaint
+from .models import Car, Order
 from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from .models import Profile
+from .forms import ProfileForm
+
 
 
 # Create your views here.
@@ -114,10 +119,71 @@ def order(request):
     else:
         print("error")
         return render(request,'bill.html')
-    
-    
+
+
+import json
+from django.conf import settings
+import stripe
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+@csrf_exempt
+@login_required
+def create_checkout_session(request):
+    # get json from post
+    data = json.loads(request.body)
+    print(data)
+
+    request.session['name'] = data['name']
+    request.session['total'] = data['total']
+    request.session['from'] = data['from']
+    request.session['to'] = data['to']
+    request.session['date'] = data['date']
+    request.session['car']=data['car']
+    request.session['color']=data['color']
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    print(stripe.api_key)
+   
+    currency = 'inr'
+    total = data.get('total')
+
+    base_url = request.build_absolute_uri('/')[:-1]
+    checkout_session =  stripe.checkout.Session.create(
+
+        payment_method_types=['card'],
+         mode='payment',
+        success_url=f'{base_url}/success/',
+       
+        cancel_url=f'{base_url}/cancel/',
+       
+        line_items=[
+            {
+                'price_data': {
+                    'currency': currency,
+                    'product_data': {
+                        'name': 'Car Rent',
+                    },
+                    'unit_amount': int(total)*100
+                },
+                'quantity': 1,
+            },
+        ],
+       customer_email=request.user.email,
+
+        billing_address_collection='required',
+
+    )
+
+    return JsonResponse({'sessionId': checkout_session['id']})
+
+
+def success_view(request):
+    return render(request, 'success.html')
+
+def cancel_view(request):
+    return render(request, 'cancel.html')
+
     # views.py
-def complaint_view(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
@@ -128,14 +194,79 @@ def complaint_view(request):
         messages.success(request, "Your complaint has been registered successfully!")
         return redirect('complaint')
     return render(request, 'complaint.html')
-
-from django.contrib.auth.decorators import login_required
-from .models import Profile
-
 @login_required
 def profile_view(request):
-   try:
-        profile = Profile.objects.get(user=request.user)
-   except Profile.DoesNotExist:
-        profile = None
-   return render(request, 'profile.html', {'profile': profile})
+    profile = Profile.objects.filter(user=request.user).first()
+    if not profile:
+        return redirect('profile_update')
+
+    return render(request, 'profile.html', {
+        'profile': profile
+    })
+
+@login_required
+def profile_update_view(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        gender =  request.POST.get('gender')
+        age = request.POST.get('age')
+        photo = request.FILES.get('photo')
+         
+      
+        if name and email:
+            profile = Profile(
+                name=name, 
+                email=email,
+                gender = gender,
+                age = age,
+                image = photo,
+               
+                user = request.user
+            )
+            profile.save()
+            messages.success(request, "Profile created successfully")
+            return redirect('profile')
+        else:
+            messages.error(request, "Please fill in all the fields")
+    return render(request, 'profile_form.html')
+
+@login_required
+def profile_edit_view(request):
+    profile = Profile.objects.filter(user=request.user).first()
+    if not profile:
+        return redirect('profile_edit')
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        gender =  request.POST.get('gender')
+        age = request.POST.get('age')
+        image = request.POST.get('image')
+        bio = request.POST.get('bio')
+        
+
+        if name:
+            profile.name = name
+        if email:
+            profile.email = email
+        if gender:
+            profile.gender = gender
+        if age:
+            profile.age = age
+        if image:
+            profile.image = image
+        if bio:
+            profile.bio = bio    
+
+        # Save the changes
+        profile.save()
+
+        # Redirect to a new URL:
+        return redirect('profile')
+
+    # If the request method was not POST, display the form
+    else:
+        return render(request, 'profile_edit.html', {'profile': profile})
+      
+

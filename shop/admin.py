@@ -6,5 +6,7 @@ admin.site.register(Category)
 admin.site.register(Contact)
 admin.site.register(Car)
 admin.site.register(Order)
-admin.site.register(Profile),
+admin.site.register(Profile)
+
+
 

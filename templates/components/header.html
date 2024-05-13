@@ -10,13 +10,7 @@
             <h1>ZoomCar<span>.</span></h1>
 
         </a>
-        <div class="user-welcome">
-            {%if user.is_authenticated%}
-            <i class="fas fa-user" style="padding-top: 15%;"> <a href="{% url 'profile' %}"><h3>Welcome {{user.username}}</h3></a> </i>
-
-          
-            {% endif %}
-        </div>
+       
 
         <nav id="navbar" class="navbar">
             <ul>
@@ -26,9 +20,10 @@
                 <li><a href="{% url 'admin:index' %}">Admin</a></li>
               
                 {%if user.is_authenticated%}
+                <li><a href="{% url 'profile' %}">Profile</a></li>
                
                 
-                <li><a href="{% url 'vehicles' %}">Vehicles</a></li>
+                <li><a href="{% url 'vehicles' %}">Rent Car</a></li>
                 <li><a href="{% url 'contact' %}">Contact</a></li>
                 <li><a href="{% url 'signout' %}"><button class="btn btn-primary" style="background-color: #21b2d2;">Logout</button></a></li>
                 {% else %}
