@@ -1,0 +1,49 @@
+<!-- ======= Header ======= -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+        <a href="{% url 'home' %}" class="logo d-flex align-items-center me-auto me-lg-0">
+            <!-- Uncomment the line below if you also wish to use an image logo -->
+            <!-- <img src="/static/img/logo.png" alt=""> -->
+            <h1>ZoomCar<span>.</span></h1>
+
+        </a>
+        <div class="user-welcome">
+            {%if user.is_authenticated%}
+            <i class="fas fa-user" style="padding-top: 15%;"> <a href="{% url 'profile' %}"><h3>Welcome {{user.username}}</h3></a> </i>
+
+          
+            {% endif %}
+        </div>
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+               
+                <li><a href="{% url 'admin:index' %}">Admin</a></li>
+              
+                {%if user.is_authenticated%}
+               
+                
+                <li><a href="{% url 'vehicles' %}">Vehicles</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><a href="{% url 'signout' %}"><button class="btn btn-primary" style="background-color: #21b2d2;">Logout</button></a></li>
+                {% else %}
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><a href="{% url 'register' %}"><button class="btn btn-primary" style="background-color: #21b2d2;">Register</button></a></li>
+                <li><a href="{% url 'signin' %}"><button class="btn btn-primary" style="background-color:#21b2d2;">Login</button></a></li>
+                
+                {% endif %}
+                
+            </ul>
+        </nav><!-- .navbar -->
+
+ 
+        <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+        <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+
+    </div>
+</header><!-- End Header -->

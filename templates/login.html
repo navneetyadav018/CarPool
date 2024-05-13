@@ -1,0 +1,149 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <section class="h-100 gradient-form" style="background-color: #eee;">
+    {% include 'messages.html' %}
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-xl-10">
+          <div class="card rounded-3 text-black">
+            <div class="row g-0">
+              <div class="col-lg-6">
+                <div class="card-body p-md-5 mx-md-4">
+  
+                  <div class="text-center">
+                    <img src="https://i.pinimg.com/736x/0b/00/ec/0b00eceba1bdca24c92f21f8065930cb.jpg" style="width: 185px;" alt="logo">
+                      
+                    <h4 class="mt-1 mb-5 pb-1">We are The ZoomCar Team</h4>
+                  </div>
+  
+                  <form method="post"  action="/signin">
+                    {% csrf_token %}
+                    <p>Please login to your account</p>
+  
+                    <div class="form-outline mb-4">
+                      <label class="form-label" for="form2Example11">Username</label>
+                      <input type="text" id="loginusername" name="loginusername" class="form-control"
+                        placeholder="Username" required >
+                      {% comment %} <label class="form-label" for="form2Example11">Username</label> {% endcomment %}
+                    </div>
+  
+  
+                    
+                    <div class="form-outline mb-4">
+                      <label class="form-label" for="form2Example22">Password</label>
+                      <input type="password" id="loginpassword" name = "loginpassword" class="form-control" required />
+                      {% comment %} <label class="form-label" for="form2Example22">Password</label> {% endcomment %}
+                    </div>
+  
+  
+                    <div class="text-center pt-1 mb-5 pb-1">
+                     
+                      <button type="submit" class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" style="background-color:#21b2d2;">Log in</button>
+                      
+                    </div>
+  
+                    <div class="d-flex align-items-center justify-content-center pb-4">
+                      <p class="mb-0 me-2">Don't have an account?</p>
+                      
+                      <a class="btn btn-outline-danger" href="/register" role="button" style="background-color: #21b2d2;">Create new</a>
+                    </div>
+  
+                  </form>
+  
+                </div>
+              </div>
+                <div class="col-lg-6 d-flex align-items-center">
+                  
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" alt="login img" style="width: 600px;">
+                  
+
+                </div>
+               
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  
+
+<!-- <section class="h-100 gradient-form" style="background-color: #26d1eb;">
+
+
+  {% include 'messages.html' %}
+  
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-xl-10">
+        <div class="card rounded-3 text-black">
+          <div class="row g-0">
+            <div class="col-lg-6">
+              <div class="card-body p-md-5 mx-md-4">
+
+                <div class="text-center">
+                  {%load static%}
+                  <img src={%static "logo1.webp"%}
+                    style="width: 150px;" alt="logo">
+                  <h4 class="mt-1 mb-5 pb-1">ZoomCar</h4>
+                </div>
+
+                <form method="post"  action="/signin">
+                  {%csrf_token%}
+                  <p>Please login to your account</p>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="form2Example11">Username</label>
+                    <input type="text" id="loginusername" name="loginusername" class="form-control"
+                      placeholder="Username" required >
+                    {% comment %} <label class="form-label" for="form2Example11">Username</label> {% endcomment %}
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="form2Example22">Password</label>
+                    <input type="password" id="loginpassword" name = "loginpassword" class="form-control" required />
+                    {% comment %} <label class="form-label" for="form2Example22">Password</label> {% endcomment %}
+                  </div>
+
+                  <div class="text-center pt-1 mb-5 pb-1">
+                    
+                      <button type="submit" class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" >Log in</button>
+                  </div>
+                </form>
+                  <div class="d-flex align-items-center justify-content-center pb-4">
+                    <p class="mb-0 me-2">Don't have an account?</p>
+                    {% comment %} <button type="button" class="btn btn-outline-danger" href="/register">Create new</button> {% endcomment %}
+                    <a class="btn btn-outline-danger" href="/register" role="button">Create new</a>
+                  </div>
+
+                
+
+              </div>
+            </div>
+            <div class="col-lg-6 d-flex align-items-center gradient-custom-2 " 
+            style="background-image: url({%static "login.jpg"%});  background-repeat: no-repeat; background-size: cover;">
+              <div class="text-black px-3 py-4 p-md-5 mx-md-4">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+  
+</body>
+</html>
+
+
