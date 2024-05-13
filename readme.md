@@ -26,4 +26,4 @@ Information about the license for your project.
 
 How to get in touch with you or your team.
 
-![alt text](<Screenshot 2024-05-13 114132.png>) ![alt text](<Screenshot 2024-05-13 114054.png>) ![alt text](<Screenshot 2024-05-13 114031.png>) ![alt text](<Screenshot 2024-05-13 114010.png>) ![alt text](<Screenshot 2024-05-13 113955.png>) ![alt text](<Screenshot 2024-05-13 113924.png>) ![alt text](<Screenshot 2024-05-13 113907.png>) ![alt text](<Screenshot 2024-05-13 113852.png>)
+[text](screenshots)
