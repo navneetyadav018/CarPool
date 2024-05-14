@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from shop.views import contact_view, register, signin, signout, vehicles, order, create_checkout_session, success_view, cancel_view
 from shop.views import *
-from shop.views import profile_view, profile_update_view, profile_edit_view,ChangePasswordView,faq_page
+from shop.views import profile_view, profile_update_view, profile_edit_view,ChangePasswordView,faq_page,order_detail,cancel_order
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +26,8 @@ urlpatterns = [
      path('profile', profile_view, name='profile'),
     path('profile/create', profile_update_view, name='profile_update'),
     path('profile/edit', profile_edit_view, name='profile_edit'),
+    path('order/<int:order_id>/', order_detail, name='order_detail'),
+    path('order/<int:order_id>/cancel/', cancel_order, name='cancel_order'),
     
     path('change-password/', ChangePasswordView.as_view(), name='change_password'),
     path('faq',faq_page,name = 'faq'),

@@ -9,65 +9,115 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rent</title>
- 
-  
-</head>
-<body>
-  <main role="main" style="background-color: rgb(200, 200, 200)">
+  <style>
+    .rent-page {
+      background-color: #c8c8c8;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
 
-    <section class="jumbotron text-center" style="background-color: rgb(200, 200, 200)">
+    .rent-page .jumbotron {
+      background-color: #c8c8c8;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    .rent-page .jumbotron h1 {
+      font-size: 50px;
+      margin-bottom: 1rem;
+    }
+
+    .rent-page .jumbotron p {
+      font-size: 25px;
+      margin-top: 1rem;
+    }
+
+    .rent-page .album {
+      background-color: #f8f9fa;
+      padding: 2rem 0;
+    }
+
+    .rent-page .card {
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .rent-page .card img {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      height: 225px;
+      object-fit: cover;
+    }
+
+    .rent-page .card-body {
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .rent-page .card-body h4 {
+      margin-bottom: 1rem;
+    }
+
+    .rent-page .card-body p {
+      margin-bottom: 0.5rem;
+      color: #555;
+    }
+
+    .rent-page .btn-group {
+      display: flex;
+      justify-content: center;
+    }
+
+    .rent-page .btn-group .btn {
+      background-color: #21b2d2;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .rent-page .btn-group .btn:hover {
+      background-color: #1a8ca0;
+    }
+  </style>
+</head>
+<body class="rent-page">
+  <main role="main">
+    <section class="jumbotron text-center">
       <div class="container">
-        <h1 class="jumbotron-heading" style="font-size:50px">Welcome {{request.user}} !!</h1>
-       <p style="font-size:25px; margin-top:30px">Get wide varieties of cars in affordable prices!!</p>
-        <p>
-          
-          
-        </p>
+        <h1 class="jumbotron-heading">Welcome {{ request.user }} !!</h1>
+        <p>Get a wide variety of cars at affordable prices!!</p>
       </div>
     </section>
- 
-    <div class="album py-5 bg-light" id="1">
-      <div class="container" id="2">
-        
-        <div class="row" id="3">
+
+    <div class="album py-5 bg-light">
+      <div class="container">
+        <div class="row">
           {% for i in car %}
           <div class="col-md-4">
-            
             <div class="card mb-4 shadow-sm">
-              
-              {%load static%}
-              <img src = '/media/{{i.image}}'  alt="car" class="d-block w-100" height="225" >
+              <img src='/media/{{ i.image }}' alt="car" class="d-block w-100">
               <div class="card-body">
-                
-                
-                <h4 style="text-align:center" >{{i.car_name}}</h4>
-                
-                <p class="card-text">{{i.car_desc}}</p>
-                <p id="{{i.car_id}}">Price per Day : {{i.price}}</p>
-               
-                <div class="d-flex justify-content-between align-items-center" id="7">
-                  <div class="btn-group" id="8">
-                    <a type="button" class="btn btn-sm btn-dark " href="\bill" id="rentbtn" style="background-color:#21b2d2;">RENT</a>
-                   
-                  </div>
-                  
+                <h4>{{ i.car_name }}</h4>
+                <p class="card-text">{{ i.car_desc }}</p>
+                <p>Price per Day: {{ i.price }}</p>
+                <div class="btn-group">
+                  <a type="button" class="btn btn-sm" href="{% url 'bill' %}" id="rentbtn">RENT</a>
                 </div>
               </div>
             </div>
-            
           </div>
-          
-          {%endfor%}
-          
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </main>
 </body>
 </html>
- 
 
-{%endblock %}
-
-
-
-
-
-
-
+{% endblock %}

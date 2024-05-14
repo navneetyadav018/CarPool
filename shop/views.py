@@ -13,6 +13,10 @@ from .forms import ProfileForm
 from .forms import ChangePasswordForm
 
 from .models import FAQ
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+
+
 
 
 
@@ -106,23 +110,43 @@ def faq_page(request):
     faqs = FAQ.objects.all()
     return render(request, 'faq.html', {'faqs': faqs})
 
+def bill_view(request):
+    context = {
+        'user': request.user,
+
+        # ... other context variables ...
+
+    }
+    return render(request, 'bill.html', context)
+
 def order(request):
+
+    
     if request.method == "POST":
+         
+       
+        
+        
         billname = request.POST.get('billname','')
         billemail = request.POST.get('billemail','')
         billphone = request.POST.get('billphone','')
         billaddress = request.POST.get('billaddress','')
         billcity = request.POST.get('billcity','')
-        cars11 = request.POST['cars11']
+        cars11 = request.POST.get('cars11')
+        if cars11 is None:
+            messages.error(request, 'Please Fill The Details.')
+            return redirect('bill')
+        
         dayss = request.POST.get('dayss','')
         date = request.POST.get('date','')
         fl = request.POST.get('fl','')
         tl = request.POST.get('tl','')
         # print(request.POST['cars11'])
         
-        order = Order(name = billname,email = billemail,phone = billphone,address = billaddress,city=billcity,cars = cars11,days_for_rent = dayss,date = date,loc_from = fl,loc_to = tl)
+        order = Order(name = billname,email = billemail,phone = billphone,address = billaddress,city=billcity,cars = cars11,days_for_rent = dayss,date = date,loc_from = fl,loc_to = tl,user = request.user)
         order.save()
-        return redirect('home')
+        messages.success(request, "Successful booking!")
+        return redirect('profile')
     else:
         print("error")
         return render(request,'bill.html')
@@ -150,11 +174,14 @@ def create_checkout_session(request):
     request.session['color']=data['color']
     stripe.api_key = settings.STRIPE_SECRET_KEY
     print(stripe.api_key)
-   
-    currency = 'inr'
-    total = data.get('total')
-
     base_url = request.build_absolute_uri('/')[:-1]
+   
+    
+    total = data.get('total')
+    currency = 'inr'
+
+   
+
     checkout_session =  stripe.checkout.Session.create(
 
         payment_method_types=['card'],
@@ -162,15 +189,17 @@ def create_checkout_session(request):
         success_url=f'{base_url}/success/',
        
         cancel_url=f'{base_url}/cancel/',
+        
        
+         # Define the currency variable
         line_items=[
             {
                 'price_data': {
-                    'currency': currency,
+                    'currency':currency,
                     'product_data': {
-                        'name': 'Car Rent',
+                        'name': 'Flora Subscription',
                     },
-                    'unit_amount': int(total)*100
+                    'unit_amount': int(total)*100,
                 },
                 'quantity': 1,
             },
@@ -203,12 +232,15 @@ def cancel_view(request):
     return render(request, 'complaint.html')
 @login_required
 def profile_view(request):
+    orders = Order.objects.filter(user=request.user)
     profile = Profile.objects.filter(user=request.user).first()
     if not profile:
         return redirect('profile_update')
 
     return render(request, 'profile.html', {
-        'profile': profile
+        'profile': profile,
+        'orders': orders
+
     })
 
 @login_required
@@ -219,6 +251,7 @@ def profile_update_view(request):
         gender =  request.POST.get('gender')
         age = request.POST.get('age')
         photo = request.FILES.get('photo')
+        number=request.POST.get('number')
          
       
         if name and email:
@@ -228,6 +261,7 @@ def profile_update_view(request):
                 gender = gender,
                 age = age,
                 image = photo,
+                number=number,
                
                 user = request.user
             )
@@ -269,3 +303,30 @@ class ChangePasswordView(PasswordChangeView):
     def form_valid(self, form):
         messages.success(self.request, 'Your password was successfully updated!')
         return super().form_valid(form)
+    
+    
+
+#order_details
+@login_required
+def order_detail(request, order_id):
+    # Use order_id to get the order details
+    order = Order.objects.get(order_id=order_id)  # Replace 'Order' and 'id' with your actual model and field names
+
+    # Pass the order details to the template
+    context = {
+        'order': order,
+        # ... other context variables ...
+    }
+    return render(request, 'order_detail.html', context)
+#cancel_order
+@login_required
+def cancel_order(request, order_id):
+    try:
+        order = Order.objects.get(order_id=order_id)
+    except Order.DoesNotExist:
+        messages.error(request, 'No order found with the given ID.')
+        return redirect('profile')  # Replace 'order_list' with the name of the view you want to redirect to
+
+    order.delete()
+    messages.success(request, 'Order cancelled successfully!')
+    return redirect('profile')  # Replace 'order_list' with the name of the view you want to redirect to

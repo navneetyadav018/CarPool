@@ -9,11 +9,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bill</title>
-    <!-- stripe -->
+      <!-- stripe -->
 
   </head>
   <body>
-    <form method="post" action="\bill">
+    <form method="POST" action="\bill">
       {% csrf_token %}
       <div class="container" id="yo">
 
@@ -66,7 +66,7 @@
               <label for="inputZip">Pin Code</label>
               <input type="text" class="form-control" id="inputZip">
             </div>
-            {% comment %} <p>Price : {{cars.price}}</p> {% endcomment %}
+           
           </div>
           <h2 style="text-align : center" class="head my-4">Car Details</h2>
           <div class="form-row ">
@@ -200,6 +200,15 @@
     </form>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
+      
+    window.onload = function() {
+        document.getElementById('billname').value = "{{ user.username}} ";
+        document.getElementById('billemail').value = "{{ user.email }}";
+
+       // Assuming phone number is stored in user profile
+        document.getElementById('billphone').value = "{{ Profile.number }}";
+    }
+
 
   function calculate(){
     var select = document.getElementById("cars11");
@@ -296,6 +305,7 @@
     var date = document.getElementById("date").value;
     var car = document.getElementById("cars11").value;
     var color = document.getElementById("color1").value;
+    
     var stripe = Stripe('pk_test_51PCcWtSCEx40lcnhrNKHbvruu5AUP7Xi3fiE3cIIEP3nvSUhTQZ5t0qkCS2h4Yq4yLCoOSEKIen3PDRQxAYMDwgY00G6gCa3YN');
     var body = {
         name: name,
@@ -314,7 +324,10 @@
             'X-CSRFToken': '{{ csrf_token }}'
         },
         body: JSON.stringify(body)
-    }).then(function (response) {
+    
+        
+    })
+    .then(function (response) {
         return response.json();
     }).then(function (session) {
       console.log(session);

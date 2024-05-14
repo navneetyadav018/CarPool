@@ -41,6 +41,7 @@ class Order(models.Model) :
         ('SUCCESSFUL', 'Successful'),
         ('CANCELLED', 'Cancelled'),
     ]
+    user= models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     order_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=90,default="")
     email = models.CharField(max_length=50,default="")
@@ -54,7 +55,7 @@ class Order(models.Model) :
     loc_to = models.CharField(max_length=50,default="")
     
     def __str__(self):
-        return self.name
+        return f"Order {self.order_id} by {self.user.username}"
     from django.contrib.auth.models import User
 
 
@@ -75,7 +76,9 @@ class Profile(models.Model):
   image = models.ImageField(upload_to='profiles')
   age = models.IntegerField()
   email = models.EmailField()
-  # photo = models.ImageField(upload_to='profiles')
+  number = models.CharField(max_length=10)
+  
+  # photo = models.ImageField(upload_to='profile')
 
   def __str__(self):
     return self.name
