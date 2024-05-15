@@ -64,7 +64,7 @@ def register(request):
         myuser.name = name
         myuser.save()
         messages.success(request,"Your account has been successfully created!")
-        return redirect('home')
+        return redirect('signin')
 
 
     else:
