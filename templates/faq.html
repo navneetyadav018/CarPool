@@ -1,4 +1,9 @@
+{% extends 'layout/base.html' %}
+{% block title %}
+faq-answer
+{% endblock %}
 
+{% block content %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,80 +11,71 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAQs</title>
+
 <style>
-    body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f9fa;
-}
+    .faq-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+    }
 
-.container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+    .faq-container h1 {
+        text-align: center;
+        color: #333;
+    }
 
-h1 {
-    text-align: center;
-    color: #333;
-}
+    .faq-item {
+        margin-bottom: 20px;
+    }
 
-.faq {
-    margin-bottom: 20px;
-}
+    .faq-item .faq-question {
+        font-weight: bold;
+        color: #007bff;
+        cursor: pointer;
+    }
 
-.question {
-    font-weight: bold;
-    color: #007bff;
-    cursor: pointer;
-}
+    .faq-item .faq-answer {
+        display: none;
+        padding-left: 20px;
+        border-left: 2px solid #007bff;
+        color: #555;
+    }
 
-.answer {
-    display: none;
-    padding-left: 20px;
-    border-left: 2px solid #007bff;
-    color: #555;
-}
-
-.answer.active {
-    display: block;
-}
+    .faq-item .faq-answer.active {
+        display: block;
+    }
 </style>
-
-
-
-
 </head>
 <body>
-    <nav>
-        <a href="/">Home</a>
-    </nav>
+   
        
-<div class="container">
-    <h1>Frequently Asked Questions</h1>
-    
-    {% for faq in faqs %}
-    <div class="faq">
-        <div class="question">{{ faq.question }}</div>
-        <div class="answer">{{ faq.answer }}</div>
+    <div class="faq-container" style="padding: 10%;">
+        <h1>Frequently Asked Questions</h1>
+        
+        {% for faq in faqs %}
+        <div class="faq-item">
+            <div class="faq-question">{{ faq.question }}</div>
+            <div class="faq-answer">{{ faq.answer }}</div>
+        </div>
+        {% endfor %}
+        
     </div>
-    {% endfor %}
-    
-</div>
 
-<script>
-// JavaScript to toggle answer visibility
-document.querySelectorAll('.question').forEach(item => {
-    item.addEventListener('click', () => {
-        item.nextElementSibling.classList.toggle('active');
+    <script>
+    // JavaScript to toggle answer visibility
+    document.querySelectorAll('.faq-question').forEach(item => {
+        item.addEventListener('click', () => {
+            item.nextElementSibling.classList.toggle('active');
+        });
     });
-});
-</script>
+    </script>
 
 </body>
 </html>
-
+    
+    {% endblock %}

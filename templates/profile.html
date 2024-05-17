@@ -11,163 +11,163 @@ Profile
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+        /* General Styling */
+        .profile-page body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa; /* Light gray background */
+            color: #333;
             margin: 0;
             padding: 0;
+            display: flex; /* Center the container */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
-
-       .profile-page .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
+        
+        /* Container */
+        .profile-page .container {
             background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%; /* Make it responsive */
+            max-width: 900px; /* Limit maximum width */
         }
-
+        
+        /* Profile Card */
         .profile-page .card {
-            width: 100%;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            background-color: #fff;
+            text-align: center;
+            padding: 40px;
         }
-
+        
         .profile img {
+            width: 150px; /* Larger image */
+            height: 150px;
+            object-fit: cover; /* Maintain aspect ratio */
             border-radius: 50%;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            border: 3px solid #007bff; /* Add a subtle border */
         }
-
+        
         .profile h3 {
-            margin: 10px 0;
+            font-size: 2rem; /* Larger heading */
+            margin-bottom: 15px;
         }
-
-        .profile a {
+        
+        /* Profile Details Grid */
+        .profile-page .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+            gap: 20px;
+        }
+        
+        .profile-page .grid-item {
+            background-color: #f5f5f5; /* Lighter background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        /* Order Details Section */
+        .profile-page .orders {
+            margin-top: 40px;
+        }
+        
+        .profile-page .orders h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .profile-page .orders ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .profile-page .orders li {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Buttons */
+        .profile-page a.btn { /* Style buttons in the profile section */
             display: inline-block;
-            margin: 5px 10px;
             padding: 10px 20px;
             background-color: #007bff;
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
             transition: background-color 0.3s ease;
+            margin: 5px; /* Add some margin between buttons */
         }
-
-        .profile a:hover {
+        
+        .profile-page a.btn:hover {
             background-color: #0056b3;
         }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .grid-item {
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .grid-item h4 {
-            margin-bottom: 10px;
-        }
-
-        .orders {
-            margin-top: 40px;
-        }
-
-        .orders h2 {
-            margin-bottom: 20px;
-        }
-
-        .orders ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .orders li {
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .orders a {
-            margin-left: 10px;
-            padding: 5px 10px;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .orders a:hover {
-            background-color: #0056b3;
-        }
-    </style>
+        </style>
+        
 </head>
 <body>
     <div class="profile-page">
-    <section class="container">
-        <div class="card text-center">
-            <div class="profile">
-                {% if profile.image %}
-                    <img src="{{ profile.image.url }}" alt="Profile Image" width="100" height="100">
-                {% endif %}
-                <h3>{{ profile.name }}</h3>
-                {% if request.user == profile.user %}
-                    <a href="{% url 'profile_edit' %}"><i class="fa fa-pencil"></i> Edit Profile</a>
-                    <a href="{% url 'change_password' %}"><i class="fa fa-key"></i> Change Password</a>
-                {% endif %}
-            </div>
-
-            <div class="grid-container">
-                <div class="grid-item">
-                    <h4>Age</h4>
-                    <p>{{ profile.age }}</p>
+        <section class="container">  
+            <div class="card">
+                <div class="profile">
+                    {% if profile.image %}
+                        <img src="{{ profile.image.url }}" alt="Profile Image" >
+                    {% endif %}
+                    <h3>{{ profile.name }}</h3>
+                    {% if request.user == profile.user %}
+                        <a href="{% url 'profile_edit' %}" class="btn"><i class="fa fa-edit"></i> Edit Profile</a>
+                        <a href="{% url 'change_password' %}" class="btn"><i class="fa fa-key"></i> Change Password</a>
+                    {% endif %}
                 </div>
-                <div class="grid-item">
-                    <h4>Email</h4>
-                    <p>{{ profile.email }}</p>
+                <div class="grid-container">
+                    <div class="grid-item">
+                        <h4>Age</h4>
+                        <p>{{ profile.age }}</p>
+                    </div>
+                    <div class="grid-item">
+                        <h4>Email</h4>
+                        <p>{{ profile.email }}</p>
+                    </div>
+                    <div class="grid-item">
+                        <h4>Gender</h4>
+                        <p>{{ profile.gender }}</p>
+                    </div>
+                    <div class="grid-item">
+                        <h4>Bio</h4>
+                        <p>{{ profile.bio }}</p>
+                    </div>
+                    <div class="grid-item">
+                        <h4>Phone Number</h4>
+                        <p>{{ profile.number }}</p>
+                    </div>
                 </div>
-                <div class="grid-item">
-                    <h4>Gender</h4>
-                    <p>{{ profile.gender }}</p>
-                </div>
-                <div class="grid-item">
-                    <h4>Bio</h4>
-                    <p>{{ profile.bio }}</p>
-                </div>
-            </div>
-
-            <div class="orders">
-                <h2>Order Details</h2>
-                <ul>
-                    {% for order in orders %}
+    
+                <div class="orders">
+                    <h2>Order Details</h2>
+                    <ul>
+                        {% for order in orders %}
                         <li>
                             <span>Order ID: {{ order.order_id }}</span>
                             <div>
-                                <a href="{% url 'order_detail' order.order_id %}">View Details</a>
-                                <a href="{% url 'cancel_order' order.order_id %}">Cancel Order</a>
+                                <a href="{% url 'order_detail' order.order_id %}" class="btn">View Details</a>
+                                <a href="{% url 'cancel_order' order.order_id %}" class="btn">Cancel Order</a>
                             </div>
                         </li>
-                    {% empty %}
+                        {% empty %}
                         <p>No orders found.</p>
-                    {% endfor %}
-                </ul>
+                        {% endfor %}
+                    </ul>
+                </div>
+    
             </div>
-        </div>
-    </section>
+        </section>
     </div>
 </body>
 </html>

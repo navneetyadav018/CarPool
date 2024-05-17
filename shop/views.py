@@ -15,6 +15,11 @@ from .forms import ChangePasswordForm
 from .models import FAQ
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from .forms import FeedbackForm
+from .models import Feedback
+from .models import Order
+from django.contrib import messages
+
 
 
 
@@ -40,6 +45,8 @@ def contact_view(request):
     return render(request, 'contact.html')
 
 
+from django.core.mail import send_mail
+
 def register(request):
     if request.method == "POST":
         name = request.POST['name']
@@ -63,9 +70,17 @@ def register(request):
         myuser = User.objects.create_user(username=username,email=email,password=password)
         myuser.name = name
         myuser.save()
+
+        send_mail(
+            'Welcome to our website',
+            'Hi ' + username + ',\n\n' + 'Thank you for registering in our website. We are glad to have you here. We hope you have a great experience with us.\n\n' + 'Regards,\nTeam CarPool',
+            'navneetyadv6034@digipodium.com',
+            [email],
+            fail_silently=False,
+        )
+
         messages.success(request,"Your account has been successfully created!")
         return redirect('signin')
-
 
     else:
         print("error")
@@ -126,7 +141,7 @@ def order(request):
          
        
         
-        
+        total = request.POST.get('total')
         billname = request.POST.get('billname','')
         billemail = request.POST.get('billemail','')
         billphone = request.POST.get('billphone','')
@@ -141,12 +156,27 @@ def order(request):
         date = request.POST.get('date','')
         fl = request.POST.get('fl','')
         tl = request.POST.get('tl','')
+
         # print(request.POST['cars11'])
         
         order = Order(name = billname,email = billemail,phone = billphone,address = billaddress,city=billcity,cars = cars11,days_for_rent = dayss,date = date,loc_from = fl,loc_to = tl,user = request.user)
         order.save()
+        send_mail(
+        'Booking Confirmation',
+        'Hi ' + billname + ',\n\n' +
+        'Thank you for your booking. Here are your order details:\n' +
+        'Order ID: ' + str(order.order_id) + '\n' +
+        'Car: ' + cars11 + '\n' +
+        'Days: ' + dayss + '\n' +
+        'Date: ' + date + '\n' +
+        'From: ' + fl + '\n' +
+        'To: ' + tl + '\n',
+        'navneetyadv6034@digipodium.com',
+        [billemail],
+        fail_silently=False,
+    )
         messages.success(request, "Successful booking!")
-        return redirect('profile')
+        return redirect('final')
     else:
         print("error")
         return render(request,'bill.html')
@@ -158,59 +188,55 @@ import stripe
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+
 @csrf_exempt
 @login_required
 def create_checkout_session(request):
-    # get json from post
-    data = json.loads(request.body)
-    print(data)
-
-    request.session['name'] = data['name']
-    request.session['total'] = data['total']
-    request.session['from'] = data['from']
-    request.session['to'] = data['to']
-    request.session['date'] = data['date']
-    request.session['car']=data['car']
-    request.session['color']=data['color']
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    print(stripe.api_key)
-    base_url = request.build_absolute_uri('/')[:-1]
-   
+    if request.method == 'POST':
+        domain_url = request.build_absolute_uri('/')
+        data = json.loads(request.body)
+        user = request.user
     
-    total = data.get('total')
-    currency = 'inr'
 
-   
+        request.session['name'] = data['name']
+        request.session['total'] = data['total']
+        request.session['from'] = data['from']
+        request.session['to'] = data['to']
+        request.session['date'] = data['date']
+        request.session['car']=data['car']
+        request.session['color']=data['color']
 
-    checkout_session =  stripe.checkout.Session.create(
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        total = data.get('total')
+        currency = 'inr'
 
-        payment_method_types=['card'],
-         mode='payment',
-        success_url=f'{base_url}/success/',
-       
-        cancel_url=f'{base_url}/cancel/',
-        
-       
-         # Define the currency variable
-        line_items=[
-            {
-                'price_data': {
-                    'currency':currency,
-                    'product_data': {
-                        'name': 'Flora Subscription',
+        try:
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                
+
+                line_items=[
+                    {
+                        'price_data': {
+                            'currency': currency,
+                            'product_data': {
+                                'name': 'Car Rental Service',
+                            },
+                            'unit_amount': int(total)*100,
+                        },
+                        'quantity': 1,
                     },
-                    'unit_amount': int(total)*100,
-                },
-                'quantity': 1,
-            },
-        ],
-       customer_email=request.user.email,
-
-        billing_address_collection='required',
-
-    )
-
-    return JsonResponse({'sessionId': checkout_session['id']})
+                ],
+                mode='payment',
+                success_url=domain_url + 'success/',
+                cancel_url=domain_url + 'cancel/',
+                customer_email= user.email,
+             
+                 billing_address_collection='required',
+            )
+            return JsonResponse({'sessionId': checkout_session.id})
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
 
 
 def success_view(request):
@@ -298,7 +324,7 @@ from django.urls import reverse_lazy
 
 class ChangePasswordView(PasswordChangeView):
     form_class = PasswordChangeForm
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('profile')
     template_name = 'change_password.html'
     def form_valid(self, form):
         messages.success(self.request, 'Your password was successfully updated!')
@@ -311,10 +337,12 @@ class ChangePasswordView(PasswordChangeView):
 def order_detail(request, order_id):
     # Use order_id to get the order details
     order = Order.objects.get(order_id=order_id)  # Replace 'Order' and 'id' with your actual model and field names
+    feedback=Feedback.objects.filter(order=order).first()
 
     # Pass the order details to the template
     context = {
         'order': order,
+        'feedback': feedback,
         # ... other context variables ...
     }
     return render(request, 'order_detail.html', context)
@@ -328,5 +356,31 @@ def cancel_order(request, order_id):
         return redirect('profile')  # Replace 'order_list' with the name of the view you want to redirect to
 
     order.delete()
+    send_mail(
+        'Order Cancellation',
+        'Hi ' + request.user.username + ',\n\n' +
+        'Your order with ID: ' + str(order_id) + ' has been cancelled.',
+        'navneetyadv6034@digipodium.com',
+        [request.user.email],
+        fail_silently=False,
+    )
     messages.success(request, 'Order cancelled successfully!')
     return redirect('profile')  # Replace 'order_list' with the name of the view you want to redirect to
+
+
+@login_required
+def submit_feedback(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST, user=request.user)
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            feedback.user = request.user
+            feedback.save()
+            messages.success(request, 'Your feedback has been submitted.')
+            return redirect('profile')  # Redirect to the same page or another relevant page
+    else:
+        form = FeedbackForm(user=request.user)
+    return render(request, 'feedback_form.html', {'form': form})
+
+def final_view(request):
+    return render(request, 'final.html')    

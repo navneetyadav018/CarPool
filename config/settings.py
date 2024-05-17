@@ -108,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Kolkata'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -136,8 +136,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.digipodium.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "xxxxx@digipodium.com"
-EMAIL_HOST_PASSWORD = "xxxxxxxxxxx"
+EMAIL_HOST_USER = "navneetyadv6034@digipodium.com"
+EMAIL_HOST_PASSWORD = "digi60342k23"
 # Other 3rd party settings
 
 STRIP_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')

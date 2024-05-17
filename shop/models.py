@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
 class Category(models.Model):
@@ -89,3 +90,18 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
+    
+class Feedback(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    feedback_text = models.TextField() # Provide a default value
+    rating = models.PositiveIntegerField()  # Assuming rating is out of 5
+    created_at = models.DateTimeField(default=timezone.now)  # Set default to current time
+    class Meta:
+        unique_together = ['order', 'user']
+    
+    def __str__(self):
+        return f'Feedback by {self.name} for Order {self.order.order_id}'
+    

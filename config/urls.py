@@ -21,7 +21,7 @@ urlpatterns = [
     path("bill",order,name = "bill"),
     # create-checkout-session
     path('create-checkout-session/', create_checkout_session, name='create-checkout-session'),
-    path('success/', success_view, name='success'),
+    path('success', success_view, name='success'),
     path('cancel/', cancel_view, name='cancel'),
      path('profile', profile_view, name='profile'),
     path('profile/create', profile_update_view, name='profile_update'),
@@ -31,6 +31,9 @@ urlpatterns = [
     
     path('change-password/', ChangePasswordView.as_view(), name='change_password'),
     path('faq',faq_page,name = 'faq'),
+    path('feedback/', submit_feedback, name='submit_feedback'), 
+    path('final', TemplateView.as_view(template_name='final.html'), name='final'),
+   
 
 ]
     

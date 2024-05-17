@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submit Feedback</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        form > div {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            color: #555555;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #dddddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message-list {
+            margin-top: 20px;
+            list-style-type: none;
+            padding: 0;
+        }
+        .message-list li {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            color: #155724;
+        }
+        .star-rating {
+            display: flex;
+            direction: row-reverse;
+            font-size: 2em;
+            justify-content: space-around;
+            width: 150px;
+        }
+        .star-rating input {
+            display: none;
+        }
+        .star-rating label {
+            color: #ddd;
+            cursor: pointer;
+        }
+        .star-rating input:checked ~ label,
+        .star-rating input:hover ~ label {
+            color: #ffd700;
+        }
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #ffdd00;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const message = "{{ messages|length }}";
+            if (message > 0) {
+                alert('Your feedback has been submitted.');
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Submit Feedback</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div>
+                {{ form.order.label_tag }}
+                {{ form.order }}
+            </div>
+            <div>
+                {{ form.name.label_tag }}
+                {{ form.name }}
+            </div>
+            <div>
+                {{ form.email.label_tag }}
+                {{ form.email }}
+            </div>
+            <div>
+                {{ form.feedback_text.label_tag }}
+                {{ form.feedback_text }}
+            </div>
+            <div>
+                <label>Rating</label>
+                <div class="star-rating">
+                    <input type="radio" id="5-stars" name="rating" value="5" />
+                    <label for="5-stars" class="star">&#9733;</label>
+                    <input type="radio" id="4-stars" name="rating" value="4" />
+                    <label for="4-stars" class="star">&#9733;</label>
+                    <input type="radio" id="3-stars" name="rating" value="3" />
+                    <label for="3-stars" class="star">&#9733;</label>
+                    <input type="radio" id="2-stars" name="rating" value="2" />
+                    <label for="2-stars" class="star">&#9733;</label>
+                    <input type="radio" id="1-star" name="rating" value="1" />
+                    <label for="1-star" class="star">&#9733;</label>
+                </div>
+            </div>
+            <button type="submit">Submit Feedback</button>
+        </form>
+        {% if messages %}
+            <ul class="message-list">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>

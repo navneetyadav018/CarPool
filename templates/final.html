@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+    <style>
+        body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url('path/to/subtle/background/image.jpg'); /* Add a subtle background image */
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.95); /* Add transparency for a frosted glass effect */
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    padding: 40px 60px;
+    text-align: center;
+    max-width: 700px;
+}
+
+h1 {
+    color: #28a745;
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+p {
+    font-size: 20px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+a {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    padding: 15px 30px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    background-color: #0056b3;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px); /* Subtle lift on hover */
+}
+
+.success-icon {  
+    font-size: 48px; /* Or use an image */
+    color: #28a745;
+    margin-bottom: 15px;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Success</h1>
+
+        <p>Your booking has been confirmed.<br>
+        You will soon be contacted by the driver at the pickup location.</p>
+        <p>Pay at the time of pickup.</p>
+        <p>
+            Soon you will receive an email with the booking details.
+        </p>
+        
+        <a href="{% url 'profile' %}">Go to Profile page for further information</a>
+    </div>
+</body>
+</html>

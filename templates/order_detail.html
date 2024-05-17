@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Order Detail</title>
+   
     <style>
+       
+    
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -69,10 +72,26 @@
             <div class="grid-item">Order Total: {{ order.total }}</div>
             <div class="grid-item">Order City: {{ order.city }}</div>
             <div class="grid-item">Order Address: {{ order.loc_from }}</div>
+            <div class="grid-item" >
+                Order ID: {{ order.order_id }}
+                {% if feedback %}
+                    Rating: {{ feedback.rating }} &#9733;
+                {% else %}
+                    No feedback has been given for this order.
+                {% endif %}
+            </div>
             
             <!-- Add other order details here -->
         </div>
         <a href="{% url 'profile' %}">Back to Profile</a>
+        <a href="{% url 'submit_feedback' %}">Give Feedback</a>
+        
     </div>
+    
+</div>
+
+<!-- Include jQuery and Bootstrap JS -->
+
+
 </body>
 </html>
