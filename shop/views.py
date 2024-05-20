@@ -99,7 +99,7 @@ def signin(request):
             return redirect('home')
         else:
             messages.error(request,"Invalid credentials")
-            return redirect('signin')
+            return render(request,'login.html',{"error":True})
 
     else:
         print("error")
@@ -189,73 +189,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
-@csrf_exempt
-@login_required
-def create_checkout_session(request):
-    if request.method == 'POST':
-        domain_url = request.build_absolute_uri('/')
-        data = json.loads(request.body)
-        user = request.user
-    
-
-        request.session['name'] = data['name']
-        request.session['total'] = data['total']
-        request.session['from'] = data['from']
-        request.session['to'] = data['to']
-        request.session['date'] = data['date']
-        request.session['car']=data['car']
-        request.session['color']=data['color']
-
-        stripe.api_key = settings.STRIPE_SECRET_KEY
-        total = data.get('total')
-        currency = 'inr'
-
-        try:
-            checkout_session = stripe.checkout.Session.create(
-                payment_method_types=['card'],
-                
-
-                line_items=[
-                    {
-                        'price_data': {
-                            'currency': currency,
-                            'product_data': {
-                                'name': 'Car Rental Service',
-                            },
-                            'unit_amount': int(total)*100,
-                        },
-                        'quantity': 1,
-                    },
-                ],
-                mode='payment',
-                success_url=domain_url + 'success/',
-                cancel_url=domain_url + 'cancel/',
-                customer_email= user.email,
-             
-                 billing_address_collection='required',
-            )
-            return JsonResponse({'sessionId': checkout_session.id})
-        except Exception as e:
-            return JsonResponse({'error': str(e)})
-
-
-def success_view(request):
-    return render(request, 'success.html')
-
-def cancel_view(request):
-    return render(request, 'cancel.html')
 
     # views.py
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        phone_number = request.POST.get('phone_number')
-        message = request.POST.get('message')
-        complaint = Complaint(name=name, email=email, phone_number=phone_number, message=message)
-        complaint.save()
-        messages.success(request, "Your complaint has been registered successfully!")
-        return redirect('complaint')
-    return render(request, 'complaint.html')
+   
 @login_required
 def profile_view(request):
     orders = Order.objects.filter(user=request.user)
@@ -383,4 +319,24 @@ def submit_feedback(request):
     return render(request, 'feedback_form.html', {'form': form})
 
 def final_view(request):
-    return render(request, 'final.html')    
+    return render(request, 'final.html')
+
+
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+from django.urls import reverse_lazy
+from .forms import CustomPasswordResetForm
+
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'password_reset_form.html'
+    form_class = CustomPasswordResetForm
+    success_url = reverse_lazy('password_reset_done')
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'password_reset_done.html'
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'password_reset_confirm.html'
+    success_url = reverse_lazy('password_reset_complete')
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'password_reset_complete.html'

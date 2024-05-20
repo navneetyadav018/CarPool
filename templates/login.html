@@ -56,6 +56,13 @@
                       
                       <a class="btn btn-outline-danger" href="/register" role="button" style="background-color: #21b2d2;">Create new</a>
                     </div>
+                    {% if error %}
+                    <div class="d-flex align-items-center justify-content-center pb-4">
+                      <p class="mb-0 me-2">Forgot password?</p>
+                      
+                      <a class="btn btn-outline-danger" href="{% url 'password_reset' %}" role="button" style="background-color: #21b2d2;">Forgot password</a>
+                    </div>
+                    {% endif %}
   
                   </form>
   

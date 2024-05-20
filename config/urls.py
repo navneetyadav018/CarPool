@@ -4,7 +4,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
-from shop.views import contact_view, register, signin, signout, vehicles, order, create_checkout_session, success_view, cancel_view
+from shop.views import contact_view, register, signin, signout, vehicles, order
 from shop.views import *
 from shop.views import profile_view, profile_update_view, profile_edit_view,ChangePasswordView,faq_page,order_detail,cancel_order
 
@@ -20,9 +20,7 @@ urlpatterns = [
     path("vehicles", vehicles, name= "vehicles"),
     path("bill",order,name = "bill"),
     # create-checkout-session
-    path('create-checkout-session/', create_checkout_session, name='create-checkout-session'),
-    path('success', success_view, name='success'),
-    path('cancel/', cancel_view, name='cancel'),
+   
      path('profile', profile_view, name='profile'),
     path('profile/create', profile_update_view, name='profile_update'),
     path('profile/edit', profile_edit_view, name='profile_edit'),
@@ -33,6 +31,10 @@ urlpatterns = [
     path('faq',faq_page,name = 'faq'),
     path('feedback/', submit_feedback, name='submit_feedback'), 
     path('final', TemplateView.as_view(template_name='final.html'), name='final'),
+    path('password_reset/', CustomPasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
    
 
 ]
