@@ -69,11 +69,12 @@
             <div class="grid-item">Order ID: {{ order.order_id }}</div>
             <div class="grid-item">Order Date: {{ order.date }}</div>
             <div class="grid-item">Days for Rent: {{ order.days_for_rent }}</div>
-            <div class="grid-item">Order Total: {{ order.total }}</div>
+            <div class="grid-item">Car Booked: {{ order.cars }}</div>
             <div class="grid-item">Order City: {{ order.city }}</div>
             <div class="grid-item">Order Address: {{ order.loc_from }}</div>
+           
             <div class="grid-item" >
-                Order ID: {{ order.order_id }}
+               
                 {% if feedback %}
                     Rating: {{ feedback.rating }} &#9733;
                 {% else %}
