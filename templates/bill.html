@@ -169,6 +169,16 @@
   </form>
   
   <script>
+     var billName = "{{user.username}}"; // replace with the actual variable name for username
+    var billEmail = "{{user.email}}"; // replace with the actual variable name for email
+    var billPhone = "{{u.number}}";
+    window.onload = function() {
+        document.getElementById('billname').value = billName;
+        document.getElementById('billemail').value = billEmail;
+        document.getElementById('billphone').value = billPhone;
+    }
+
+
   
     function calculate(){
       var select = document.getElementById("cars11");

@@ -54,6 +54,7 @@ class Order(models.Model) :
     date = models.CharField(max_length=50,default="")
     loc_from = models.CharField(max_length=50,default="")
     loc_to = models.CharField(max_length=50,default="")
+   
     
     def __str__(self):
         return f"Order {self.order_id} by {self.user.username}"

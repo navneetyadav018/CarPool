@@ -19,6 +19,7 @@ from .forms import FeedbackForm
 from .models import Feedback
 from .models import Order
 from django.contrib import messages
+from decimal import Decimal, InvalidOperation
 
 
 
@@ -139,9 +140,6 @@ def order(request):
     
     if request.method == "POST":
          
-       
-        
-        total = request.POST.get('total')
         billname = request.POST.get('billname','')
         billemail = request.POST.get('billemail','')
         billphone = request.POST.get('billphone','')
